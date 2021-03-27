@@ -92,13 +92,14 @@ func handleMsgEditOracleScript(ctx sdk.Context, k keeper.Keeper, msg types.MsgEd
 
 // handleMsgCreateAIDataSource is a function message setting data source
 func handleMsgCreateAIDataSource(ctx sdk.Context, k keeper.Keeper, msg types.MsgCreateAIDataSource) (*sdk.Result, error) {
-	// we can safely parse fees to coins since we have validated it in the Msg already
-	fees, _ := sdk.ParseCoins(msg.Fees)
-	aiDataSource := types.NewAIDataSource(msg.Name, msg.Owner, fees, msg.Description)
 
 	if k.IsNamePresent(ctx, types.DataSourceStoreKeyString(msg.Name)) {
 		return nil, sdkerrors.Wrap(types.ErrDataSourceNameExists, "Name already exists")
 	}
+
+	// we can safely parse fees to coins since we have validated it in the Msg already
+	fees, _ := sdk.ParseCoins(msg.Fees)
+	aiDataSource := types.NewAIDataSource(msg.Name, msg.Owner, fees, msg.Description)
 
 	k.SetAIDataSource(ctx, msg.Name, aiDataSource)
 	k.AddAIDataSourceFile(msg.Code, msg.Name)

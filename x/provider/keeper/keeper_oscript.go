@@ -58,6 +58,7 @@ func (k Keeper) EditOracleScript(ctx sdk.Context, oldName, newName string, code 
 
 	key := types.OracleScriptStoreKey(oldName)
 	// if the user does not want to reuse the old name
+	k.SetOracleScript(ctx, newName, oScript)
 	if oldName != newName {
 		store := ctx.KVStore(k.storeKey)
 		byteKey := []byte(key)
@@ -68,7 +69,6 @@ func (k Keeper) EditOracleScript(ctx sdk.Context, oldName, newName string, code 
 	} else {
 		k.EditOracleScriptFile(code, oldName)
 	}
-	k.SetOracleScript(ctx, newName, oScript)
 }
 
 // AddOracleScriptFile adds the file to filecache,

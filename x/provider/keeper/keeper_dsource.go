@@ -62,6 +62,7 @@ func (k Keeper) SetAIDataSource(ctx sdk.Context, name string, aiDataSource types
 func (k Keeper) EditAIDataSource(ctx sdk.Context, oldName, newName string, code []byte, aiDataSource types.AIDataSource) {
 	key := types.DataSourceStoreKey(oldName)
 	// if the user does not want to reuse the old name
+	k.SetAIDataSource(ctx, newName, aiDataSource)
 	if oldName != newName {
 		store := ctx.KVStore(k.storeKey)
 		byteKey := []byte(key)
@@ -74,7 +75,6 @@ func (k Keeper) EditAIDataSource(ctx sdk.Context, oldName, newName string, code 
 		// edit the file instead since old name = new name
 		k.EditAIDataSourceFile(code, oldName)
 	}
-	k.SetAIDataSource(ctx, newName, aiDataSource)
 }
 
 // AddAIDataSourceFile adds the file to filecache,
