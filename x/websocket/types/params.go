@@ -1,13 +1,15 @@
 package types
 
 import (
-	"github.com/cosmos/cosmos-sdk/x/params"
+	params "github.com/cosmos/cosmos-sdk/x/params/types"
 )
 
 // Default parameter namespace
 const (
 	DefaultParamspace = ModuleName
 	// TODO: Define your default parameters
+	ReporterNameLen = 20000  // 20KB
+	MsgLen          = 200000 // 200KB
 )
 
 // Parameter store keys

@@ -3,14 +3,13 @@ package types
 import (
 	"fmt"
 
-	"github.com/cosmos/cosmos-sdk/x/params"
+	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 )
 
 // Default parameter namespace
 const (
 	DefaultParamspace = ModuleName
 	// TODO: Define your default parameters
-	DefaultMaximumRequestBytes   = 1024
 	MaximumRequestBytesThreshold = 1 * 1024 * 1024 // 1MB
 )
 
@@ -22,15 +21,8 @@ var (
 )
 
 // ParamKeyTable for provider module
-func ParamKeyTable() params.KeyTable {
-	return params.NewKeyTable().RegisterParamSet(&Params{})
-}
-
-// Params - used for initializing default parameter for provider at genesis
-type Params struct {
-	// TODO: Add your Paramaters to the Paramter struct
-	// KeyParamName string `json:"key_param_name"`
-	MaximumRequestBytes uint64 `json:"maximum_request_bytes"`
+func ParamKeyTable() paramtypes.KeyTable {
+	return paramtypes.NewKeyTable().RegisterParamSet(&Params{})
 }
 
 // NewParams creates a new Params object
@@ -53,11 +45,11 @@ func (p Params) String() string {
 }
 
 // ParamSetPairs - Implements params.ParamSet
-func (p *Params) ParamSetPairs() params.ParamSetPairs {
-	return params.ParamSetPairs{
+func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
+	return paramtypes.ParamSetPairs{
 		// TODO: Pair your key with the param
 		// params.NewParamSetPair(KeyParamName, &p.ParamName),
-		params.NewParamSetPair(KeyMaximumRequestBytes, &p.MaximumRequestBytes, validateMaximumRequestBytes),
+		paramtypes.NewParamSetPair(KeyMaximumRequestBytes, &p.MaximumRequestBytes, validateMaximumRequestBytes),
 	}
 }
 
@@ -72,7 +64,7 @@ func validateMaximumRequestBytes(i interface{}) error {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}
 
-	if v < 0 || v > MaximumRequestBytesThreshold {
+	if v < 0 {
 		return fmt.Errorf("invalid maximum bytes: %d", v)
 	}
 

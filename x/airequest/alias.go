@@ -10,9 +10,6 @@ const (
 	RouterKey                      = types.RouterKey
 	StoreKey                       = types.StoreKey
 	QuerierRoute                   = types.QuerierRoute
-	IPFSUrl                        = types.IPFSUrl
-	IPFSAdd                        = types.IPFSAdd
-	IPFSCat                        = types.IPFSCat
 	DefaultParamspace              = types.DefaultParamspace
 	EventTypeSetAIRequest          = types.EventTypeSetAIRequest
 	AttributeRequestValidator      = types.AttributeRequestValidator
@@ -36,6 +33,7 @@ var (
 	NewGenesisState    = types.NewGenesisState
 	RequestKeyPrefix   = types.RequestKeyPrefix
 	ErrRequestNotFound = types.ErrRequestNotFound
+	NewAIRequest       = types.NewAIRequest
 )
 
 type (

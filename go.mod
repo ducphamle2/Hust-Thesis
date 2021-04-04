@@ -1,40 +1,41 @@
 module github.com/oraichain/orai
 
-go 1.13
+go 1.15
 
 require (
-	github.com/Microsoft/go-winio v0.4.15 // indirect
-	github.com/containerd/containerd v1.4.3 // indirect
-	github.com/cosmos/cosmos-sdk v0.39.1
-	github.com/cosmos/go-bip39 v0.0.0-20180819234021-555e2067c45d
+	github.com/CosmWasm/wasmd v0.15.0
+	github.com/cosmos/cosmos-sdk v0.42.3
+	github.com/cosmos/go-bip39 v1.0.0
 	github.com/cosmtrek/air v1.21.2 // indirect
-	github.com/docker/distribution v2.7.1+incompatible // indirect
-	github.com/docker/docker v20.10.0-rc2.0.20201203102754-ab373df1125b+incompatible
-	github.com/docker/go-connections v0.4.0 // indirect
-	github.com/docker/go-units v0.4.0 // indirect
-	github.com/etcd-io/bbolt v1.3.3 // indirect
+	github.com/creack/pty v1.1.11 // indirect
 	github.com/fatih/color v1.10.0 // indirect
-	github.com/gogo/protobuf v1.3.1
+	github.com/gogo/protobuf v1.3.3
+	github.com/golang/protobuf v1.4.3
 	github.com/gorilla/mux v1.8.0
+	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	github.com/imdario/mergo v0.3.11 // indirect
 	github.com/kyokomi/emoji v2.2.4+incompatible
-	github.com/moby/term v0.0.0-20201110203204-bea5bbe245bf // indirect
-	github.com/morikuni/aec v1.0.0 // indirect
-	github.com/oasisprotocol/oasis-core/go v0.0.0-20200730171716-3be2b460b3ac
-	github.com/opencontainers/go-digest v1.0.0 // indirect
-	github.com/opencontainers/image-spec v1.0.1 // indirect
+	github.com/oasisprotocol/oasis-core/go v0.2012.4
 	github.com/pelletier/go-toml v1.8.1 // indirect
-	github.com/peterbourgon/diskv v2.0.1+incompatible
+	github.com/pkg/errors v0.9.1
+	github.com/pwaller/goupx v0.0.0-20160623083017-1d58e01d5ce2 // indirect
+	github.com/rakyll/statik v0.1.7
+	github.com/rs/zerolog v1.20.0
 	github.com/segmentio/ksuid v1.0.3
-	github.com/spf13/afero v1.2.2 // indirect
-	github.com/spf13/cobra v1.0.0
+	github.com/snikch/goodman v0.0.0-20171125024755-10e37e294daa
+	github.com/spf13/cast v1.3.1
+	github.com/spf13/cobra v1.1.1
+	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.7.1
-	github.com/stretchr/testify v1.6.1
-	github.com/tendermint/go-amino v0.15.1
-	github.com/tendermint/tendermint v0.33.7
-	github.com/tendermint/tm-db v0.5.1
-	golang.org/x/sys v0.0.0-20201204225414-ed752295db88 // indirect
-	golang.org/x/tools/gopls v0.5.2 // indirect
-	gopkg.in/yaml.v2 v2.3.0
-	gotest.tools/v3 v3.0.3 // indirect
+	github.com/stretchr/testify v1.7.0
+	github.com/tendermint/tendermint v0.34.8
+	github.com/tendermint/tm-db v0.6.4
+	golang.org/x/sync v0.0.0-20201207232520-09787c993a3a
+	golang.org/x/sys v0.0.0-20210220050731-9a76102bfb43 // indirect
+	google.golang.org/genproto v0.0.0-20210114201628-6edceaf6022f
+	google.golang.org/grpc v1.35.0
 )
+
+replace google.golang.org/grpc => google.golang.org/grpc v1.33.2
+
+replace github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1

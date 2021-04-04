@@ -2,6 +2,7 @@ package websocket
 
 import (
 	"github.com/oraichain/orai/x/websocket/keeper"
+	"github.com/oraichain/orai/x/websocket/subscribe"
 	"github.com/oraichain/orai/x/websocket/types"
 )
 
@@ -14,17 +15,20 @@ const (
 )
 
 var (
-	NewKeeper         = keeper.NewKeeper
-	NewQuerier        = keeper.NewQuerier
-	ModuleCdc         = types.ModuleCdc
-	RegisterCodec     = types.RegisterCodec
-	NewGenesisState   = types.NewGenesisState
-	ReportKeyPrefix   = types.ReportKeyPrefix
-	ReporterKeyPrefix = types.ReporterKeyPrefix
-	StrategyKeyPrefix = types.StrategyKeyPrefix
+	NewKeeper       = keeper.NewKeeper
+	NewQuerier      = keeper.NewQuerier
+	NewSubscriber   = subscribe.NewSubscriber
+	ModuleCdc       = types.ModuleCdc
+	RegisterCodec   = types.RegisterCodec
+	NewGenesisState = types.NewGenesisState
+	ReportKeyPrefix = types.ReportKeyPrefix
 )
 
 type (
-	Keeper       = keeper.Keeper
-	GenesisState = types.GenesisState
+	Keeper          = keeper.Keeper
+	Subscriber      = subscribe.Subscriber
+	GenesisState    = types.GenesisState
+	Report          = types.Report
+	WebSocketConfig = subscribe.WebSocketConfig
+	MsgCreateReport = types.MsgCreateReport
 )

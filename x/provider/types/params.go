@@ -3,16 +3,16 @@ package types
 import (
 	"fmt"
 
-	"github.com/cosmos/cosmos-sdk/x/params"
+	params "github.com/cosmos/cosmos-sdk/x/params/types"
 )
 
 // Default parameter namespace
 const (
 	DefaultParamspace = ModuleName
 	// TODO: Define your default parameters
-	DefaultOracleScriptRewardPercentage = uint64(70)
-	DefaultMaximumCodeBytes             = uint64(1024) // 1MB
-	MaximumCodeBytesThreshold           = 4096         // 4MB
+	DefaultOracleScriptRewardPercentage = uint64(60)
+	DefaultMaximumCodeBytes             = uint64(1024 * 1024) // 1MB
+	MaximumCodeBytesThreshold           = 4 * 1024 * 1024     // 4MB
 )
 
 // Parameter store keys
@@ -26,14 +26,6 @@ var (
 // ParamKeyTable for provider module
 func ParamKeyTable() params.KeyTable {
 	return params.NewKeyTable().RegisterParamSet(&Params{})
-}
-
-// Params - used for initializing default parameter for provider at genesis
-type Params struct {
-	// TODO: Add your Paramaters to the Paramter struct
-	// KeyParamName string `json:"key_param_name"`
-	OracleScriptRewardPercentage uint64 `json:"oscript_reward_percentage"`
-	MaximumCodeBytes             uint64 `json:"maximum_code_bytes"`
 }
 
 // NewParams creates a new Params object
