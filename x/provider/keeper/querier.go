@@ -7,8 +7,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/oraichain/orai/x/provider/types"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 // Querier is used as Keeper will have duplicate methods if used directly, and gRPC names take precedence over keeper
@@ -25,13 +23,6 @@ var _ types.QueryServer = &Querier{}
 
 // DataSourceInfo implements the Query/DataSourceInfo gRPC method
 func (k *Querier) DataSourceInfo(goCtx context.Context, req *types.DataSourceInfoReq) (*types.DataSourceInfoRes, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "empty request")
-	}
-
-	if req.Name == "" {
-		return nil, status.Error(codes.InvalidArgument, "data source name query cannot be empty")
-	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	aiDataSource, err := k.keeper.GetAIDataSource(ctx, req.Name)
@@ -49,10 +40,6 @@ func (k *Querier) DataSourceInfo(goCtx context.Context, req *types.DataSourceInf
 }
 
 func (k *Querier) ListDataSources(goCtx context.Context, req *types.ListDataSourcesReq) (*types.ListDataSourcesRes, error) {
-
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "empty request")
-	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	var queryResAIDSources []types.AIDataSource
@@ -84,15 +71,6 @@ func (k *Querier) ListDataSources(goCtx context.Context, req *types.ListDataSour
 }
 
 func (k *Querier) OracleScriptInfo(goCtx context.Context, req *types.OracleScriptInfoReq) (*types.OracleScriptInfoRes, error) {
-
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "empty request")
-	}
-
-	if req.Name == "" {
-		return nil, status.Error(codes.InvalidArgument, "oracle script name query cannot be empty")
-	}
-
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	oScript, err := k.keeper.GetOracleScript(ctx, req.Name)
 	if err != nil {
@@ -111,10 +89,6 @@ func (k *Querier) OracleScriptInfo(goCtx context.Context, req *types.OracleScrip
 }
 
 func (k *Querier) ListOracleScripts(goCtx context.Context, req *types.ListOracleScriptsReq) (*types.ListOracleScriptsRes, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "empty request")
-	}
-
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	var queryResOScripts []types.OracleScript
 
@@ -145,11 +119,6 @@ func (k *Querier) ListOracleScripts(goCtx context.Context, req *types.ListOracle
 }
 
 func (k *Querier) ListTestCases(goCtx context.Context, req *types.ListTestCasesReq) (*types.ListTestCasesRes, error) {
-
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "empty request")
-	}
-
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	var queryResTestCases []types.TestCase
 
@@ -181,16 +150,7 @@ func (k *Querier) ListTestCases(goCtx context.Context, req *types.ListTestCasesR
 }
 
 func (k *Querier) TestCaseInfo(goCtx context.Context, req *types.TestCaseInfoReq) (*types.TestCaseInfoRes, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "empty request")
-	}
-
 	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	if req.Name == "" {
-		return nil, status.Error(codes.InvalidArgument, "test case name query cannot be empty")
-	}
-
 	testCase, err := k.keeper.GetTestCase(ctx, req.Name)
 	if err != nil {
 		return nil, sdkerrors.Wrap(types.ErrTestCaseNotFound, err.Error())
@@ -206,11 +166,6 @@ func (k *Querier) TestCaseInfo(goCtx context.Context, req *types.TestCaseInfoReq
 }
 
 func (k *Querier) QueryMinFees(goCtx context.Context, req *types.MinFeesReq) (*types.MinFeesRes, error) {
-
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "empty request")
-	}
-
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if req.OracleScriptName == "min_gas_prices" && req.ValNum <= 0 {

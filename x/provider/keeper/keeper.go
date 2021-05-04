@@ -158,7 +158,7 @@ func (k *Keeper) GetAIDataSources(ctx sdk.Context, page, limit uint) ([]types.AI
 
 	// if cannot find any data sources
 	if len(dSources) == 0 {
-		return nil, fmt.Errorf("")
+		return nil, fmt.Errorf("Data source not found")
 	}
 	return dSources, nil
 }
