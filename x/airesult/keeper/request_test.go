@@ -116,7 +116,7 @@ func TestResolveRequestsFromReports(t *testing.T) {
 	report := websockettypes.NewReport(id, dsResults, tcResults, 1, sdk.NewCoins(sdk.NewCoin("stake", sdk.NewInt(29))), []byte{0x50}, reporter, "")
 
 	// verify report
-	err = testKeeper.WebSocketKeeper.AddReport(ctx, id, report)
+	err = testKeeper.WebSocketKeeper.SetReport(ctx, id, report)
 	require.NoError(t, err)
 
 	reward := airesulttypes.DefaultReward(1)
@@ -134,7 +134,7 @@ func TestResolveRequestsFromReports(t *testing.T) {
 	report = websockettypes.NewReport(id, dsResults, tcResults, 1, sdk.NewCoins(sdk.NewCoin("stake", sdk.NewInt(29))), []byte{0x50}, reporter, "")
 
 	// verify report
-	err = testKeeper.WebSocketKeeper.AddReport(ctx, id, report)
+	err = testKeeper.WebSocketKeeper.SetReport(ctx, id, report)
 	require.NoError(t, err)
 
 	reward = airesulttypes.DefaultReward(1)

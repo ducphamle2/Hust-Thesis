@@ -85,7 +85,7 @@ func TestResolveResult(t *testing.T) {
 	report := websockettypes.NewReport(id, dsResults, tcResults, 1, sdk.NewCoins(sdk.NewCoin("stake", sdk.NewInt(29))), []byte{0x50}, reporter, "")
 
 	// verify report
-	err := testKeeper.WebSocketKeeper.AddReport(ctx, id, report)
+	err := testKeeper.WebSocketKeeper.SetReport(ctx, id, report)
 	require.NoError(t, err)
 
 	// test result with 2 validators aka two reports, total 70% reports to finish
@@ -113,7 +113,7 @@ func TestResolveResult(t *testing.T) {
 	report = websockettypes.NewReport(id, dsResults, tcResults, 1, sdk.NewCoins(sdk.NewCoin("stake", sdk.NewInt(29))), []byte{0x50}, reporter, "")
 
 	// verify report
-	err = testKeeper.WebSocketKeeper.AddReport(ctx, id, report)
+	err = testKeeper.WebSocketKeeper.SetReport(ctx, id, report)
 	require.NoError(t, err)
 
 	testKeeper.Keeper.ResolveResult(ctx, report, 1, 70)

@@ -35,14 +35,14 @@ func (m msgServer) AddReport(goCtx context.Context, msg *types.MsgCreateReport) 
 		return nil, fmt.Errorf("Error: Cannot find AI request")
 	}
 
-	if m.keeper.ValidateReport(ctx, msg.GetReporter(), request) != nil {
+	if !m.keeper.ContainsValidator(request.GetValidators(), msg.Reporter.GetValidator()) {
 		return nil, fmt.Errorf("Error: cannot find reporter in the AI request")
 	}
 
 	report := types.NewReport(msg.RequestID, msg.DataSourceResults, msg.TestCaseResults, ctx.BlockHeight(), msg.Fees, msg.AggregatedResult, msg.Reporter, msg.ResultStatus)
 
 	// call keeper
-	err = m.keeper.AddReport(ctx, msg.RequestID, report)
+	err = m.keeper.SetReport(ctx, msg.RequestID, report)
 	if err != nil {
 		return nil, err
 	}

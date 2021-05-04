@@ -101,9 +101,9 @@ func (k Keeper) validateBasic(ctx sdk.Context, req *airequest.AIRequest, rep *we
 	// }
 
 	// TODO
-	err := k.webSocketKeeper.ValidateReport(ctx, rep.GetReporter(), req)
-	if err != nil {
-		k.Logger(ctx).Error(fmt.Sprintf("error in validating the report: %v\n", err.Error()))
+	isContain := k.webSocketKeeper.ContainsValidator(req.GetValidators(), rep.Reporter.Validator)
+	if !isContain {
+		k.Logger(ctx).Error(fmt.Sprintf("Validator is not in the request list"))
 		return false
 	}
 	return true

@@ -1,11 +1,7 @@
 package keeper
 
 import (
-	"fmt"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/oraichain/orai/x/airequest"
 	"github.com/oraichain/orai/x/websocket/types"
 )
 
@@ -21,14 +17,6 @@ func (k Keeper) SetReport(ctx sdk.Context, id string, rep *types.Report) error {
 		return err
 	}
 	ctx.KVStore(k.storeKey).Set(types.ReportStoreKey(id, string(rep.Reporter.Validator[:])), bz)
-	return nil
-}
-
-// AddReport performs sanity checks and adds a new batch from one validator to one request
-// to the store. Note that we expect each validator to report to all raw data requests at once.
-func (k Keeper) AddReport(ctx sdk.Context, rid string, rep *types.Report) error {
-
-	k.SetReport(ctx, rid, rep)
 	return nil
 }
 
@@ -100,17 +88,8 @@ func (k Keeper) GetAllReports(ctx sdk.Context) (reports []types.Report) {
 	return reports
 }
 
-// ValidateReport validates if the report is valid to get rewards
-func (k Keeper) ValidateReport(ctx sdk.Context, reporter *types.Reporter, req *airequest.AIRequest) error {
-	// Check if the validator is in the requested list of validators
-	if !containsVal(req.GetValidators(), reporter.GetValidator()) {
-		return sdkerrors.Wrap(types.ErrValidatorNotFound, fmt.Sprintln("failed to find the requested validator"))
-	}
-	return nil
-}
-
 // containsVal returns whether the given slice of validators contains the target validator.
-func containsVal(vals []sdk.ValAddress, target sdk.ValAddress) bool {
+func (k Keeper) ContainsValidator(vals []sdk.ValAddress, target sdk.ValAddress) bool {
 	for _, val := range vals {
 		if val.Equals(target) {
 			return true
