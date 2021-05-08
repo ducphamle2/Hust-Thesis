@@ -6,22 +6,14 @@ import (
 )
 
 const (
-	ModuleName                     = types.ModuleName
-	RouterKey                      = types.RouterKey
-	StoreKey                       = types.StoreKey
-	QuerierRoute                   = types.QuerierRoute
-	DefaultParamspace              = types.DefaultParamspace
-	EventTypeSetAIRequest          = types.EventTypeSetAIRequest
-	AttributeRequestValidator      = types.AttributeRequestValidator
-	EventTypeRequestWithData       = types.EventTypeRequestWithData
-	AttributeRequestDSources       = types.AttributeRequestDSources
-	AttributeRequestTCases         = types.AttributeRequestTCases
-	AttributeRequestID             = types.AttributeRequestID
-	AttributeOracleScriptName      = types.AttributeOracleScriptName
-	AttributeRequestCreator        = types.AttributeRequestCreator
-	AttributeRequestValidatorCount = types.AttributeRequestValidatorCount
-	AttributeRequestInput          = types.AttributeRequestInput
-	AttributeRequestExpectedOutput = types.AttributeRequestExpectedOutput
+	ModuleName               = types.ModuleName
+	RouterKey                = types.RouterKey
+	StoreKey                 = types.StoreKey
+	QuerierRoute             = types.QuerierRoute
+	DefaultParamspace        = types.DefaultParamspace
+	EventTypeSetAIRequest    = types.EventTypeSetAIRequest
+	AttributeRequest         = types.AttributeRequest
+	EventTypeRequestWithData = types.EventTypeRequestWithData
 )
 
 var (

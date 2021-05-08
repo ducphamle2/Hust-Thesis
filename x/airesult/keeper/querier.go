@@ -8,8 +8,6 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	airequest "github.com/oraichain/orai/x/airequest"
 	"github.com/oraichain/orai/x/airesult/types"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 // Querier is used as Keeper will have duplicate methods if used directly, and gRPC names take precedence over keeper
@@ -26,17 +24,8 @@ var _ types.QueryServer = &Querier{}
 
 // QueryFullRequest implements the Query/QueryFullRequest gRPC method
 func (k *Querier) QueryFullRequest(goCtx context.Context, req *types.QueryFullRequestReq) (*types.QueryFullRequestRes, error) {
-	if req == nil {
-		return nil, status.Error(codes.InvalidArgument, "empty request")
-	}
-
 	// id of the request
 	id := req.GetRequestId()
-
-	if id == "" {
-		return nil, status.Error(codes.InvalidArgument, "request id query cannot be empty")
-	}
-
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	request, err := k.keeper.aiRequestKeeper.GetAIRequest(ctx, id)
 	if err != nil {

@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -55,15 +56,14 @@ func (k msgServer) CreateAIRequest(goCtx context.Context, msg *types.MsgSetAIReq
 		return nil, err
 	}
 	k.keeper.Logger(ctx).Info(fmt.Sprintf("required fees needed: %v\n", requiredFees))
+	// check if the account has enough spendable coins
+	spendableCoins := k.keeper.bankKeeper.SpendableCoins(ctx, msg.Creator)
 
 	// If the total fee is larger than the fee provided by the user then we return error
 	if requiredFees.IsAnyGT(providedFees) {
 		k.keeper.Logger(ctx).Error(fmt.Sprintf("Your payment fees is less than required\n"))
 		return nil, sdkerrors.Wrap(types.ErrNeedMoreFees, fmt.Sprintf("Fees given: %v, where fees required is: %v", providedFees, requiredFees))
 	}
-
-	// check if the account has enough spendable coins
-	spendableCoins := k.keeper.bankKeeper.SpendableCoins(ctx, msg.Creator)
 	// If the total fee is larger or equal to the spendable coins of the user then we return error
 	if requiredFees.IsAnyGTE(spendableCoins) || providedFees.IsAnyGTE(spendableCoins) {
 		k.keeper.Logger(ctx).Error(fmt.Sprintf("Your account has run out of tokens to create the AI Request\n"))
@@ -73,7 +73,7 @@ func (k msgServer) CreateAIRequest(goCtx context.Context, msg *types.MsgSetAIReq
 	// substract coins in the creator wallet to charge fees
 	err = k.keeper.bankKeeper.SubtractCoins(ctx, msg.Creator, providedFees)
 	if err != nil {
-		return nil, sdkerrors.Wrap(types.ErrNeedMoreFees, "Your account has run out of tokens to create the AI Request, or there is something wrong")
+		return nil, sdkerrors.Wrap(types.ErrNeedMoreFees, fmt.Sprintf("Your account has run out of tokens to create the AI Request, or there is something wrong with error: %v", err))
 	}
 
 	// set a new request with the aggregated result into blockchain
@@ -81,31 +81,15 @@ func (k msgServer) CreateAIRequest(goCtx context.Context, msg *types.MsgSetAIReq
 
 	k.keeper.SetAIRequest(ctx, request.RequestID, request)
 
-	// TODO: Define your msg events
-	// Emit an event describing a data request and asked validators.
+	requestBytes, err := json.Marshal(request)
+	if err != nil {
+		return nil, sdkerrors.Wrap(types.ErrRequestInvalid, fmt.Sprintf("Cannot marshal request %v with error: %v", request, err))
+	}
+
 	event := sdk.NewEvent(types.EventTypeRequestWithData)
 	event = event.AppendAttributes(
-		sdk.NewAttribute(types.AttributeRequestID, string(request.RequestID[:])),
-		sdk.NewAttribute(types.AttributeOracleScriptName, request.OracleScriptName),
-		sdk.NewAttribute(types.AttributeRequestCreator, msg.Creator.String()),
-		sdk.NewAttribute(types.AttributeRequestValidatorCount, fmt.Sprint(msg.ValidatorCount)),
-		sdk.NewAttribute(types.AttributeRequestInput, string(msg.Input)),
-		sdk.NewAttribute(types.AttributeRequestExpectedOutput, string(msg.ExpectedOutput)),
+		sdk.NewAttribute(types.AttributeRequest, string(requestBytes)),
 	)
-
-	for _, validator := range validators {
-		event = event.AppendAttributes(
-			sdk.NewAttribute(types.AttributeRequestValidator, validator.String()),
-		)
-	}
-
-	// these are multiple attribute for array
-	for _, aiDataSource := range aiDataSources {
-		event = event.AppendAttributes(sdk.NewAttribute(types.AttributeRequestDSources, aiDataSource.GetName()))
-	}
-	for _, testCase := range testCases {
-		event = event.AppendAttributes(sdk.NewAttribute(types.AttributeRequestTCases, testCase.GetName()))
-	}
 
 	ctx.EventManager().EmitEvent(event)
 

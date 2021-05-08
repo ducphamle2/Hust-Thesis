@@ -9,9 +9,9 @@ services:
         soft: 65536
         hard: 65536
     ports:
-      - 1317:1317
-      - 26656:26656
-      - 26657:26657
+      - 1319:1317
+      - 26666:26656
+      - 26667:26657
     security_opt:
       - 'seccomp:unconfined'
     cap_add:

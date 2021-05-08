@@ -53,7 +53,3 @@ func (k *Querier) QueryAIRequestIDs(goCtx context.Context, req *types.QueryAIReq
 		RequestIds: requestIDs,
 	}, nil
 }
-
-func (k *Querier) QueryAIRequests(goCtx context.Context) {
-
-}

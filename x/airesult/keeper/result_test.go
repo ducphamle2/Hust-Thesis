@@ -73,8 +73,8 @@ func TestResolveResult(t *testing.T) {
 	dsResults := []*websockettypes.DataSourceResult{dsResult1, dsResult2, dsResult3}
 
 	// init test case results
-	tcResult1 := websockettypes.NewTestCaseResult(firstTcName, dsResults)
-	tcResult2 := websockettypes.NewTestCaseResult(secondTcName, dsResults)
+	tcResult1 := websockettypes.NewTestCaseResult(firstTcName, "success", dsResults)
+	tcResult2 := websockettypes.NewTestCaseResult(secondTcName, "success", dsResults)
 	tcResults := []*websockettypes.TestCaseResult{tcResult1, tcResult2}
 
 	// init reporter

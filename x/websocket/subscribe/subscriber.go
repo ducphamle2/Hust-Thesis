@@ -69,7 +69,7 @@ func (subscriber *Subscriber) handleTransaction(queryClient types.QueryClient, t
 			// process with each event type
 			switch ev.Type {
 			case artypes.EventTypeRequestWithData:
-				msgReport, err := subscriber.handleAIRequestLog(queryClient, &ev)
+				msgReport, err := subscriber.handleAIRequestLog(queryClient, ev.Attributes)
 				if err != nil {
 					return err
 				}

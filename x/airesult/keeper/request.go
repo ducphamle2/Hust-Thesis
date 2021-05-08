@@ -33,10 +33,12 @@ func (k Keeper) ResolveRequestsFromReports(ctx sdk.Context, rep *websocket.Repor
 
 	// collect data source owners that have their data sources executed to reward
 	for i, testCaseResult := range rep.GetTestCaseResults() {
-		reward.TestCaseNames = append(reward.TestCaseNames, testCaseResult.GetName())
-		tCaseFees := req.GetTestCases()[i].GetFees()
-		reward.TestCaseFees = append(reward.DataSourceFees, tCaseFees.String())
-		providerFees.Add(req.GetTestCases()[i].GetFees()...)
+		if testCaseResult.GetStatus() == k.webSocketKeeper.GetKeyResultSuccess() {
+			reward.TestCaseNames = append(reward.TestCaseNames, testCaseResult.GetName())
+			tCaseFees := req.GetTestCases()[i].GetFees()
+			reward.TestCaseFees = append(reward.DataSourceFees, tCaseFees.String())
+			providerFees.Add(req.GetTestCases()[i].GetFees()...)
+		}
 	}
 	// change reward ratio to the ratio of validator
 	// 0.6 by default, 2 decimals for percentage

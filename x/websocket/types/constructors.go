@@ -52,10 +52,12 @@ func NewDataSourceResult(
 // NewTestCaseResult is the constructor of the test case result struct
 func NewTestCaseResult(
 	name string,
+	status string,
 	dataSourceResults []*DataSourceResult,
 ) *TestCaseResult {
 	return &TestCaseResult{
 		Name:              name,
+		Status:            status,
 		DataSourceResults: dataSourceResults,
 	}
 }
