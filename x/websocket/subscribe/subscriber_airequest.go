@@ -3,7 +3,6 @@ package subscribe
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -44,7 +43,7 @@ func (subscriber *Subscriber) handleAIRequestLog(queryClient types.QueryClient, 
 	}
 	// Skip if not related to this validator
 	validators := request.GetValidators()
-	subscriber.log.Info(":delivery_truck: Validator lists: ", validators)
+	subscriber.log.Info(":delivery_truck: Validator lists: %v", validators)
 	currentValidator := sdk.ValAddress(subscriber.cliCtx.GetFromAddress())
 	hasMe := false
 	for _, validator := range validators {
@@ -99,7 +98,7 @@ func (subscriber *Subscriber) handleAIRequestLog(queryClient types.QueryClient, 
 			// remove all quotes at start and begin
 			result := strings.Replace(string(outTestCase.Data), "\\", "", -1)
 			result = strings.Trim(result, QuoteString)
-			fmt.Printf("result after running test case: %v", result)
+			subscriber.log.Info(":delivery_truck: result after running test case: %v", result)
 			dsTemp := &dataSourceResTemp{}
 			err = json.Unmarshal([]byte(result), dsTemp)
 			if err != nil {
@@ -115,11 +114,11 @@ func (subscriber *Subscriber) handleAIRequestLog(queryClient types.QueryClient, 
 			dataSourceResult.Name = aiDataSource.Name
 			dataSourceResult.Status = dsTemp.Status
 			dataSourceResult.Result = []byte(dsTemp.Result)
-			fmt.Println("data source result: ", dataSourceResult)
+			testCaseResult.DataSourceResults = append(testCaseResult.DataSourceResults, dataSourceResult)
+			subscriber.log.Info(":delivery_truck: data source result: %s", dataSourceResult)
 			// append an data source result into the list
 			dataSourceResultsTest = append(dataSourceResultsTest, dataSourceResult)
 		}
-
 		// add test case result
 		testCaseResults = append(testCaseResults, testCaseResult)
 	}
@@ -146,9 +145,7 @@ func (subscriber *Subscriber) handleAIRequestLog(queryClient types.QueryClient, 
 				dataSourceResult.Status = types.ResultFailure
 				dataSourceResult.Result = []byte(types.FailedResponseDs)
 			} else {
-				// remove all quote at start and begin
-				result := strings.Replace(string(outDataSource.Data), "\\", "", -1)
-				result = strings.Trim(result, QuoteString)
+				result := string(outDataSource.Data)
 				if len(outDataSource.Data) == 0 || result == "null" {
 					// change status to fail so the datasource cannot be rewarded afterwards
 					dataSourceResult.Status = types.ResultFailure
@@ -165,7 +162,7 @@ func (subscriber *Subscriber) handleAIRequestLog(queryClient types.QueryClient, 
 		// append an data source result into the list
 		dataSourceResults = append(dataSourceResults, dataSourceResult)
 	}
-	subscriber.log.Info(":star: final result: ", results)
+	subscriber.log.Info(":star: final result: %v", results)
 	// Create a new MsgCreateReport with a new reporter to the Oraichain
 	reporter := types.NewReporter(
 		subscriber.cliCtx.GetFromAddress(), subscriber.cliCtx.GetFromName(),
