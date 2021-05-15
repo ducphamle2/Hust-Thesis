@@ -15,7 +15,7 @@ func (msg *MsgCreateReport) Type() string { return "create_report" }
 // ValidateBasic runs stateless checks on the message
 func (msg *MsgCreateReport) ValidateBasic() error {
 	reporter := msg.GetReporter()
-	if reporter.GetAddress().Empty() || len(reporter.GetName()) == 0 || !provider.IsStringAlphabetic(reporter.GetName()) || len(reporter.GetName()) >= ReporterNameLen {
+	if len(reporter.GetName()) == 0 || !provider.IsStringAlphabetic(reporter.GetName()) || len(reporter.GetName()) >= ReporterNameLen {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, reporter.String())
 	} else if len(msg.GetRequestID()) == 0 || reporter.Validator.Empty() {
 		return sdkerrors.Wrap(ErrMsgReportInvalid, "Request ID / validator address cannot be empty")
@@ -56,5 +56,5 @@ func (msg *MsgCreateReport) GetSignBytes() []byte {
 
 // GetSigners defines whose signature is required
 func (msg *MsgCreateReport) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{msg.Reporter.Address}
+	return []sdk.AccAddress{sdk.AccAddress(msg.Reporter.Validator)}
 }

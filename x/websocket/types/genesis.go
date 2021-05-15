@@ -23,9 +23,6 @@ func (gs *GenesisState) Validate() error {
 		if record.BlockHeight <= int64(0) {
 			return fmt.Errorf("invalid Report: BlockHeight: %d. Error: Invalid block height", record.BlockHeight)
 		}
-		if record.Reporter.Address.Empty() {
-			return fmt.Errorf("invalid AIRequests: Reporter: %s. Error: Missing Reporter information", record.Reporter)
-		}
 		// if record.Fees.Empty() {
 		// 	return fmt.Errorf("invalid AIRequests: Owner: %s. Error: Missing Fees", record.Fees)
 		// }

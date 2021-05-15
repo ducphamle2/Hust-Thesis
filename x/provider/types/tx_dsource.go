@@ -25,7 +25,7 @@ func (msg *MsgCreateAIDataSource) ValidateBasic() error {
 	// if msg.Owner.Empty() {
 	// 	return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Owner.String())
 	// }
-	if len(msg.Name) == 0 || len(msg.Contract) == 0 {
+	if len(msg.Name) == 0 || len(msg.Contract) == 0 || len(msg.Owner) == 0 {
 		return sdkerrors.Wrap(ErrEmpty, "Name and/or Contract cannot be empty")
 	}
 

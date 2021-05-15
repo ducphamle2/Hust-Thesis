@@ -12,34 +12,34 @@ func (k Keeper) ResolveResult(ctx sdk.Context, rep *websocket.Report, valCount i
 	id := rep.GetRequestID()
 	if valCount == 1 {
 		k.SetResult(ctx, id, types.NewAIRequestResult(id, types.RequestStatusFinished, 1))
-	} else {
-		var result *types.AIRequestResult
-		if !k.HasResult(ctx, id) {
-			result = types.NewAIRequestResult(rep.GetRequestID(), types.RequestStatusPending, 0)
-		} else {
-			result, _ = k.GetResult(ctx, rep.GetRequestID())
-		}
-		result.ResultLength += 1
-
-		// check if there are enough results from the validators or not
-		ratio := sdk.NewDecWithPrec(totalReportPercentage, 2)
-
-		// the number of reports that the user requires
-		reportLengths := sdk.NewDec(int64(valCount))
-
-		// the threshold that the length of the result must pass
-		threshold := reportLengths.Mul(ratio)
-
-		// the actual result length
-		resultLengths := sdk.NewDec(int64(result.ResultLength))
-
-		// if the result length is GTE the threshold then the result is valid, and considered finished
-		if resultLengths.GTE(threshold) {
-			result.Status = types.RequestStatusFinished
-		}
-		// store the result
-		k.SetResult(ctx, id, result)
+		return
 	}
+	var result *types.AIRequestResult
+	if !k.HasResult(ctx, id) {
+		result = types.NewAIRequestResult(rep.GetRequestID(), types.RequestStatusPending, 0)
+	} else {
+		result, _ = k.GetResult(ctx, rep.GetRequestID())
+	}
+	result.ResultLength += 1
+
+	// check if there are enough results from the validators or not
+	ratio := sdk.NewDecWithPrec(totalReportPercentage, 2)
+
+	// the number of reports that the user requires
+	reportLengths := sdk.NewDec(int64(valCount))
+
+	// the threshold that the length of the result must pass
+	threshold := reportLengths.Mul(ratio)
+
+	// the actual result length
+	resultLengths := sdk.NewDec(int64(result.ResultLength))
+
+	// if the result length is GTE the threshold then the result is valid, and considered finished
+	if resultLengths.GTE(threshold) {
+		result.Status = types.RequestStatusFinished
+	}
+	// store the result
+	k.SetResult(ctx, id, result)
 }
 
 // HasResult checks if a given request has result or not

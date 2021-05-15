@@ -3,7 +3,6 @@ package subscribe
 import (
 	"context"
 	"encoding/json"
-	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -96,11 +95,9 @@ func (subscriber *Subscriber) handleAIRequestLog(queryClient types.QueryClient, 
 				break
 			}
 			// remove all quotes at start and begin
-			result := strings.Replace(string(outTestCase.Data), "\\", "", -1)
-			result = strings.Trim(result, QuoteString)
-			subscriber.log.Info(":delivery_truck: result after running test case: %v", result)
+			subscriber.log.Info(":delivery_truck: result after running test case: %v", outTestCase.Data)
 			dsTemp := &dataSourceResTemp{}
-			err = json.Unmarshal([]byte(result), dsTemp)
+			err = json.Unmarshal([]byte(outTestCase.Data), dsTemp)
 			if err != nil {
 				subscriber.log.Error(":skull: failed to unmarshal test case, due to error: %v", err)
 				testCaseResult.Status = types.ResultFailure
@@ -165,7 +162,7 @@ func (subscriber *Subscriber) handleAIRequestLog(queryClient types.QueryClient, 
 	subscriber.log.Info(":star: final result: %v", results)
 	// Create a new MsgCreateReport with a new reporter to the Oraichain
 	reporter := types.NewReporter(
-		subscriber.cliCtx.GetFromAddress(), subscriber.cliCtx.GetFromName(),
+		subscriber.cliCtx.GetFromName(),
 		sdk.ValAddress(subscriber.cliCtx.GetFromAddress()),
 	)
 	msgReport := types.NewMsgCreateReport(

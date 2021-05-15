@@ -16,5 +16,6 @@ const (
 
 	AttributeValueCategory = ModuleName
 	// Attribute for request
-	AttributeRequest = "request"
+	AttributeRequest          = "request"
+	AttributeRequestValidator = "request_validator"
 )

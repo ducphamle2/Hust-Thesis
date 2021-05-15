@@ -91,6 +91,13 @@ func (k msgServer) CreateAIRequest(goCtx context.Context, msg *types.MsgSetAIReq
 		sdk.NewAttribute(types.AttributeRequest, string(requestBytes)),
 	)
 
+	// this attribute is used to filter quicker using websocket params
+	for _, validator := range validators {
+		event = event.AppendAttributes(
+			sdk.NewAttribute(types.AttributeRequestValidator, validator.String()),
+		)
+	}
+
 	ctx.EventManager().EmitEvent(event)
 
 	return types.NewMsgSetAIRequestRes(

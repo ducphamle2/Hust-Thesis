@@ -60,9 +60,9 @@ func GetCmdSetAIDataSource() *cobra.Command {
 // GetCmdSetOracleScript is the CLI command for sending a SetOracleScript transaction
 func GetCmdSetOracleScript() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "set-oscript [name] [contract] [description] [fees] (--ds [datasource list]) (--tc [testcase list])",
+		Use:   "set-oscript [name] [contract] [description] (--ds [datasource list]) (--tc [testcase list])",
 		Short: "Set a new oscript into the system",
-		Args:  cobra.MinimumNArgs(4),
+		Args:  cobra.MinimumNArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 
@@ -81,7 +81,7 @@ func GetCmdSetOracleScript() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgCreateOracleScript(args[0], args[1], clientCtx.GetFromAddress(), args[3], args[2], dSources, tCases)
+			msg := types.NewMsgCreateOracleScript(args[0], args[1], clientCtx.GetFromAddress(), args[3], dSources, tCases)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

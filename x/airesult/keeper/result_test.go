@@ -78,7 +78,7 @@ func TestResolveResult(t *testing.T) {
 	tcResults := []*websockettypes.TestCaseResult{tcResult1, tcResult2}
 
 	// init reporter
-	reporter := websockettypes.NewReporter(addrs[0], "reporter", valAddrs[0])
+	reporter := websockettypes.NewReporter("reporter", valAddrs[0])
 
 	// init report
 	id := ksuid.New().String()

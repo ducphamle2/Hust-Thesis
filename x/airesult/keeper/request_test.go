@@ -110,7 +110,7 @@ func TestResolveRequestsFromReports(t *testing.T) {
 	tcResults := []*websockettypes.TestCaseResult{tcResult1, tcResult2}
 
 	// init reporter with validator 0
-	reporter := websockettypes.NewReporter(addrs[0], "reporter", valAddrs[0])
+	reporter := websockettypes.NewReporter("reporter", valAddrs[0])
 
 	// init report
 	report := websockettypes.NewReport(id, dsResults, tcResults, 1, sdk.NewCoins(sdk.NewCoin("stake", sdk.NewInt(29))), []byte{0x50}, reporter, "")
@@ -128,7 +128,7 @@ func TestResolveRequestsFromReports(t *testing.T) {
 	fmt.Println("reward: ", reward)
 
 	// init reporter with validator 0
-	reporter = websockettypes.NewReporter(addrs[0], "reporter", valAddrs[3])
+	reporter = websockettypes.NewReporter("reporter", valAddrs[3])
 
 	// init report
 	report = websockettypes.NewReport(id, dsResults, tcResults, 1, sdk.NewCoins(sdk.NewCoin("stake", sdk.NewInt(29))), []byte{0x50}, reporter, "")

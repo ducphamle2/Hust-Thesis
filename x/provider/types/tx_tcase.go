@@ -26,7 +26,7 @@ func (msg *MsgCreateTestCase) ValidateBasic() error {
 	if msg.Owner.Empty() {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Owner.String())
 	}
-	if len(msg.Name) == 0 || len(msg.Contract) == 0 {
+	if len(msg.Name) == 0 || len(msg.Contract) == 0 || len(msg.Owner) == 0 {
 		return sdkerrors.Wrap(ErrEmpty, "Name or/and contract address cannot be empty")
 	}
 	if !IsStringAlphabetic(msg.Name) || !IsStringAlphabetic(msg.Contract) || !IsStringAlphabetic(msg.Description) {

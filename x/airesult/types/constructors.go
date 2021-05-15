@@ -43,14 +43,12 @@ func NewQueryRewardRes(
 func NewReward(
 	validators []websocket.Validator,
 	blockHeight int64,
-	totalVotingPower int64,
 	dsNames, tcNames []string,
 	dsFees, tcFees []string, validatorFees sdk.Coins,
 ) *Reward {
 	return &Reward{
 		Validators:      validators,
 		BlockHeight:     blockHeight,
-		TotalPower:      totalVotingPower,
 		DataSourceNames: dsNames,
 		TestCaseNames:   tcNames,
 		ValidatorFees:   validatorFees,
@@ -64,7 +62,6 @@ func DefaultReward(blockHeight int64) *Reward {
 	return &Reward{
 		Validators:      make([]websocket.Validator, 0),
 		BlockHeight:     blockHeight,
-		TotalPower:      int64(0),
 		TestCaseNames:   nil,
 		DataSourceNames: nil,
 		DataSourceFees:  nil,

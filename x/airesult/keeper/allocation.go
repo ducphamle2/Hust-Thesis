@@ -75,7 +75,10 @@ func (k Keeper) AllocateTokens(ctx sdk.Context, prevVotes []abci.VoteInfo, block
 	// transfer collected fees to the distribution module account to distribute the oracle rewards to the validators. Note that if we transfer all the transaction fees, then other modules won't be able to handle allocation
 
 	decValLen := sdk.NewDec(int64(len(rewardObj.Validators)))
-	decTotalPower := sdk.NewDec(rewardObj.TotalPower)
+	var decTotalPower sdk.Dec
+	for _, validator := range rewardObj.GetValidators() {
+		decTotalPower = decTotalPower.Add(sdk.NewDec(validator.VotingPower))
+	}
 
 	// fix check division by zero, no validator or zero total power
 	if decValLen.IsZero() || decValLen.IsZero() {

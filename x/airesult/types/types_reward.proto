@@ -11,10 +11,9 @@ message Reward {
   option (gogoproto.goproto_stringer) = true;
   repeated oraichain.orai.websocket.Validator validators = 1 [(gogoproto.nullable) = false];
   int64 block_height = 2;
-  int64 total_power = 3 [(gogoproto.moretags) = "json:\"total_voting_power\""];
-  repeated cosmos.base.v1beta1.Coin validator_fees = 4 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins", (gogoproto.moretags) = "json:\"validator_fees\""];
-  repeated string DataSourceFees = 5;
-  repeated string TestCaseFees = 6;
-  repeated string DataSourceNames = 7;
-  repeated string TestCaseNames = 8;
+  repeated cosmos.base.v1beta1.Coin validator_fees = 3 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins", (gogoproto.moretags) = "json:\"validator_fees\""];
+  repeated string DataSourceFees = 4;
+  repeated string TestCaseFees = 5;
+  repeated string DataSourceNames = 6;
+  repeated string TestCaseNames = 7;
 }

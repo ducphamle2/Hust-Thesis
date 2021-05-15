@@ -28,9 +28,6 @@ func (msg *MsgSetAIRequest) ValidateBasic() error {
 	if err != nil {
 		return sdkerrors.Wrap(ErrRequestFeesInvalid, err.Error())
 	}
-	if len(msg.Fees) == 0 {
-		return sdkerrors.Wrap(ErrRequestFeesInvalid, "The fee format is not correct")
-	}
 	return nil
 }
 

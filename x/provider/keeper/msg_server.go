@@ -135,7 +135,6 @@ func (m msgServer) CreateOracleScript(goCtx context.Context, msg *types.MsgCreat
 		Description: msg.GetDescription(),
 		Contract:    msg.GetContract(),
 		Owner:       msg.GetOwner(),
-		Fees:        msg.GetFees(),
 		DataSources: msg.GetDataSources(),
 		TestCases:   msg.GetTestCases(),
 	}, nil

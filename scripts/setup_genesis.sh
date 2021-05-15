@@ -14,7 +14,7 @@ oraid init --chain-id $CHAIN_ID "$MONIKER"
 (echo "$PASSWORD"; echo "$PASSWORD") | oraid keys add $USER 2>&1 | tee account.txt
 
 # hardcode the validator account for this instance
-(echo "$PASSWORD") | oraid add-genesis-account $USER "100000000000000uorai"
+(echo "$PASSWORD") | oraid add-genesis-account $USER "100000000000000orai"
 
 # submit a genesis validator tx
 ## Workraround for https://github.com/cosmos/cosmos-sdk/issues/8251

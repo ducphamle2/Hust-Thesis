@@ -28,9 +28,8 @@ func NewReport(
 }
 
 // NewReporter is the constructor of the Reporter struct
-func NewReporter(addr sdk.AccAddress, name string, valAddr sdk.ValAddress) *Reporter {
+func NewReporter(name string, valAddr sdk.ValAddress) *Reporter {
 	return &Reporter{
-		Address:   addr,
 		Name:      name,
 		Validator: valAddr,
 	}

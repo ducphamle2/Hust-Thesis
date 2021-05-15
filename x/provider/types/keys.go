@@ -29,7 +29,7 @@ const (
 	MemStoreKey = "mem_capability"
 
 	// Denom is the denominator of the currency
-	Denom = "uorai"
+	Denom = "orai"
 
 	// DataSourceKeyPrefix sets a prefix for data source key
 	DataSourceKeyPrefix = "ds"
