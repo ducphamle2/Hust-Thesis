@@ -12,8 +12,18 @@ message Reward {
   repeated oraichain.orai.websocket.Validator validators = 1 [(gogoproto.nullable) = false];
   int64 block_height = 2;
   repeated cosmos.base.v1beta1.Coin validator_fees = 3 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins", (gogoproto.moretags) = "json:\"validator_fees\""];
-  repeated string DataSourceFees = 4;
-  repeated string TestCaseFees = 5;
+  repeated DataSourceFees list_d_source_fees = 4;
+  repeated TestCaseFees list_t_case_fees = 5;
   repeated string DataSourceNames = 6;
   repeated string TestCaseNames = 7;
+}
+
+message DataSourceFees {
+  option (gogoproto.goproto_stringer) = true;
+  repeated cosmos.base.v1beta1.Coin fees = 1 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins", (gogoproto.moretags) = "json:\"data_source_fees\""];
+}
+
+message TestCaseFees {
+  option (gogoproto.goproto_stringer) = true;
+  repeated cosmos.base.v1beta1.Coin fees = 1 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins", (gogoproto.moretags) = "json:\"test_case_fees\""];
 }

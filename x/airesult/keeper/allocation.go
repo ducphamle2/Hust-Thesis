@@ -24,7 +24,7 @@ func (k Keeper) AllocateTokens(ctx sdk.Context, prevVotes []abci.VoteInfo, block
 	// retrieve fee collector module account to prepare token allocation1
 	feeCollector := k.authKeeper.GetModuleAccount(ctx, k.feeCollectorName)
 	// collect fees from the provider and validator
-	feesCollected, dsFees, tcFees, dsOwners, tcOwners := k.CollectProviderInformation(ctx, rewardObj)
+	feesCollected, dsOwners, tcOwners := k.CollectProviderInformation(ctx, rewardObj)
 	feesCollected = feesCollected.Add(rewardObj.ValidatorFees...)
 	reward := sdk.NewDecCoinsFromCoins(feesCollected...)
 	// append those coins into the fee collector to get ready allocating them to the distr module.
@@ -38,10 +38,10 @@ func (k Keeper) AllocateTokens(ctx sdk.Context, prevVotes []abci.VoteInfo, block
 
 	//Allocate non-community pool tokens to active validators weighted by voting power.
 	// reward for test cases that contribute
-	for i, tcFee := range tcFees {
+	for i, tcFee := range rewardObj.ListTCaseFees {
 
 		// safesub to prevent panic
-		remaining, hasNeg = remaining.SafeSub(sdk.NewDecCoinsFromCoins(tcFee...))
+		remaining, hasNeg = remaining.SafeSub(sdk.NewDecCoinsFromCoins(tcFee.Fees...))
 		if hasNeg {
 			k.Logger(ctx).Error(fmt.Sprintf("not enough balance to reward test case"))
 			return
@@ -49,16 +49,16 @@ func (k Keeper) AllocateTokens(ctx sdk.Context, prevVotes []abci.VoteInfo, block
 
 		// send coins to test case owner addresses
 		temp := k.bankKeeper.GetBalance(ctx, tcOwners[i], provider.Denom)
-		k.bankKeeper.SendCoinsFromModuleToAccount(ctx, k.feeCollectorName, tcOwners[i], tcFee)
+		k.bankKeeper.SendCoinsFromModuleToAccount(ctx, k.feeCollectorName, tcOwners[i], tcFee.Fees)
 		rewardCollected := k.bankKeeper.GetBalance(ctx, tcOwners[i], provider.Denom).Sub(temp)
 		k.Logger(ctx).Info(fmt.Sprintf("Reward collected for the following address %v - %v\n", tcOwners[i].String(), rewardCollected))
 	}
 
 	// reward for test cases that contribute
-	for i, dsFee := range dsFees {
+	for i, dsFee := range rewardObj.ListDSourceFees {
 
 		// safesub to prevent panic
-		remaining, hasNeg = remaining.SafeSub(sdk.NewDecCoinsFromCoins(dsFee...))
+		remaining, hasNeg = remaining.SafeSub(sdk.NewDecCoinsFromCoins(dsFee.Fees...))
 		if hasNeg {
 			k.Logger(ctx).Error(fmt.Sprintf("not enough balance to reward data source"))
 			return
@@ -66,7 +66,7 @@ func (k Keeper) AllocateTokens(ctx sdk.Context, prevVotes []abci.VoteInfo, block
 
 		// send coins to data source owner addresses
 		temp := k.bankKeeper.GetBalance(ctx, dsOwners[i], provider.Denom)
-		k.bankKeeper.SendCoinsFromModuleToAccount(ctx, k.feeCollectorName, dsOwners[i], dsFee)
+		k.bankKeeper.SendCoinsFromModuleToAccount(ctx, k.feeCollectorName, dsOwners[i], dsFee.Fees)
 		rewardCollected := k.bankKeeper.GetBalance(ctx, dsOwners[i], provider.Denom).Sub(temp)
 		k.Logger(ctx).Info(fmt.Sprintf("Reward collected for the following address %v - %v\n", dsOwners[i].String(), rewardCollected))
 
@@ -75,7 +75,7 @@ func (k Keeper) AllocateTokens(ctx sdk.Context, prevVotes []abci.VoteInfo, block
 	// transfer collected fees to the distribution module account to distribute the oracle rewards to the validators. Note that if we transfer all the transaction fees, then other modules won't be able to handle allocation
 
 	decValLen := sdk.NewDec(int64(len(rewardObj.Validators)))
-	var decTotalPower sdk.Dec
+	decTotalPower := sdk.NewDec(0)
 	for _, validator := range rewardObj.GetValidators() {
 		decTotalPower = decTotalPower.Add(sdk.NewDec(validator.VotingPower))
 	}
@@ -117,10 +117,9 @@ func (k Keeper) AllocateTokens(ctx sdk.Context, prevVotes []abci.VoteInfo, block
 	k.Logger(ctx).Info("finish allocating tokens")
 }
 
-func (k Keeper) CollectProviderInformation(ctx sdk.Context, reward *types.Reward) (sdk.Coins, []sdk.Coins, []sdk.Coins, []sdk.AccAddress, []sdk.AccAddress) {
+func (k Keeper) CollectProviderInformation(ctx sdk.Context, reward *types.Reward) (sdk.Coins, []sdk.AccAddress, []sdk.AccAddress) {
 	// collect data source fees
 	var feesCollected sdk.Coins
-	var dsFees, tcFees []sdk.Coins
 	var dsOwners, tcOwners []sdk.AccAddress
 	for i, dSourceName := range reward.GetDataSourceNames() {
 		dSource, err := k.providerKeeper.GetAIDataSource(ctx, dSourceName)
@@ -128,12 +127,7 @@ func (k Keeper) CollectProviderInformation(ctx sdk.Context, reward *types.Reward
 		if err != nil {
 			continue
 		}
-		dSourceFees, err := sdk.ParseCoinsNormalized(reward.GetDataSourceFees()[i])
-		if err != nil {
-			continue
-		}
-		feesCollected = feesCollected.Add(dSourceFees...)
-		dsFees = append(dsFees, dSourceFees)
+		feesCollected = feesCollected.Add(reward.ListDSourceFees[i].Fees...)
 		dsOwners = append(dsOwners, dSource.GetOwner())
 	}
 	// collect data source fees
@@ -143,13 +137,8 @@ func (k Keeper) CollectProviderInformation(ctx sdk.Context, reward *types.Reward
 		if err != nil {
 			continue
 		}
-		tCaseFees, err := sdk.ParseCoinsNormalized(reward.GetTestCaseFees()[i])
-		if err != nil {
-			continue
-		}
-		feesCollected = feesCollected.Add(tCaseFees...)
-		tcFees = append(tcFees, tCaseFees)
+		feesCollected = feesCollected.Add(reward.ListTCaseFees[i].Fees...)
 		tcOwners = append(tcOwners, tCase.GetOwner())
 	}
-	return feesCollected, dsFees, tcFees, dsOwners, tcOwners
+	return feesCollected, dsOwners, tcOwners
 }

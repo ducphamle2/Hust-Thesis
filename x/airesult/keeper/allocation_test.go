@@ -7,6 +7,7 @@ import (
 	airequestkeeper "github.com/oraichain/orai/x/airequest/keeper"
 	airequest "github.com/oraichain/orai/x/airequest/types"
 	"github.com/oraichain/orai/x/airesult/keeper"
+	airesult "github.com/oraichain/orai/x/airesult/types"
 	providerkeeper "github.com/oraichain/orai/x/provider/keeper"
 	"github.com/segmentio/ksuid"
 	"github.com/stretchr/testify/require"
@@ -148,9 +149,9 @@ func TestAllocateTokensToManyValidators(t *testing.T) {
 		reward.DataSourceNames = append(reward.DataSourceNames, firstDataSource.GetName())
 		reward.DataSourceNames = append(reward.DataSourceNames, secondDataSource.GetName())
 		reward.DataSourceNames = append(reward.DataSourceNames, thirdDataSource.GetName())
-		reward.DataSourceFees = append(reward.DataSourceFees, firstDataSource.GetFees().String())
-		reward.DataSourceFees = append(reward.DataSourceFees, secondDataSource.GetFees().String())
-		reward.DataSourceFees = append(reward.DataSourceFees, thirdDataSource.GetFees().String())
+		reward.ListDSourceFees = append(reward.ListDSourceFees, &airesult.DataSourceFees{Fees: firstDataSource.Fees})
+		reward.ListDSourceFees = append(reward.ListDSourceFees, &airesult.DataSourceFees{Fees: secondDataSource.Fees})
+		reward.ListDSourceFees = append(reward.ListDSourceFees, &airesult.DataSourceFees{Fees: thirdDataSource.Fees})
 	}
 
 	// init test cases
@@ -162,8 +163,8 @@ func TestAllocateTokensToManyValidators(t *testing.T) {
 	for i := 0; i < 3; i++ {
 		reward.TestCaseNames = append(reward.TestCaseNames, firstTestCase.GetName())
 		reward.TestCaseNames = append(reward.TestCaseNames, secondTestCase.GetName())
-		reward.TestCaseFees = append(reward.TestCaseFees, firstTestCase.GetFees().String())
-		reward.TestCaseFees = append(reward.TestCaseFees, secondTestCase.GetFees().String())
+		reward.ListTCaseFees = append(reward.ListTCaseFees, &airesult.TestCaseFees{Fees: firstTestCase.Fees})
+		reward.ListTCaseFees = append(reward.ListTCaseFees, &airesult.TestCaseFees{Fees: secondTestCase.Fees})
 	}
 	providerFees = providerFees.Add(firstDataSource.GetFees()...).Add(secondDataSource.Fees...).Add(thirdDataSource.Fees...).Add(firstTestCase.Fees...).Add(secondTestCase.Fees...)
 
@@ -220,11 +221,9 @@ func TestAllocateTokensToManyValidators(t *testing.T) {
 	// require.Equal(t, int64(rewardObj.TotalPower), validatorA.VotingPower+validatorB.VotingPower+validatorC.VotingPower)
 	// require.Equal(t, int64(rewardObj.TotalPower), int64(70))
 
-	feesCollected, dsFees, tcFees, dsOwners, tcOwners := testKeeper.Keeper.CollectProviderInformation(ctx, rewardObj)
+	feesCollected, dsOwners, tcOwners := testKeeper.Keeper.CollectProviderInformation(ctx, rewardObj)
 
 	fmt.Println("fees: ", feesCollected)
-	fmt.Println("dsfees: ", dsFees)
-	fmt.Println("tcfees: ", tcFees)
 	fmt.Println("dsowners: ", dsOwners)
 	fmt.Println("tcowners: ", tcOwners)
 

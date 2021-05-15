@@ -26,7 +26,7 @@ func (k Keeper) ResolveRequestsFromReports(ctx sdk.Context, rep *websocket.Repor
 		if dataSourceResult.GetStatus() == k.webSocketKeeper.GetKeyResultSuccess() {
 			reward.DataSourceNames = append(reward.DataSourceNames, dataSourceResult.GetName())
 			dSourceFees := req.GetAiDataSources()[i].GetFees()
-			reward.DataSourceFees = append(reward.DataSourceFees, dSourceFees.String())
+			reward.ListDSourceFees = append(reward.ListDSourceFees, &types.DataSourceFees{Fees: dSourceFees})
 			providerFees.Add(req.GetAiDataSources()[i].GetFees()...)
 		}
 	}
@@ -36,7 +36,7 @@ func (k Keeper) ResolveRequestsFromReports(ctx sdk.Context, rep *websocket.Repor
 		if testCaseResult.GetStatus() == k.webSocketKeeper.GetKeyResultSuccess() {
 			reward.TestCaseNames = append(reward.TestCaseNames, testCaseResult.GetName())
 			tCaseFees := req.GetTestCases()[i].GetFees()
-			reward.TestCaseFees = append(reward.DataSourceFees, tCaseFees.String())
+			reward.ListTCaseFees = append(reward.ListTCaseFees, &types.TestCaseFees{Fees: tCaseFees})
 			providerFees.Add(req.GetTestCases()[i].GetFees()...)
 		}
 	}

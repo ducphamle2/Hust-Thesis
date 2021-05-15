@@ -44,7 +44,7 @@ func NewReward(
 	validators []websocket.Validator,
 	blockHeight int64,
 	dsNames, tcNames []string,
-	dsFees, tcFees []string, validatorFees sdk.Coins,
+	dsFees, tcFees sdk.Coins, validatorFees sdk.Coins,
 ) *Reward {
 	return &Reward{
 		Validators:      validators,
@@ -52,8 +52,6 @@ func NewReward(
 		DataSourceNames: dsNames,
 		TestCaseNames:   tcNames,
 		ValidatorFees:   validatorFees,
-		DataSourceFees:  dsFees,
-		TestCaseFees:    tcFees,
 	}
 }
 
@@ -64,8 +62,8 @@ func DefaultReward(blockHeight int64) *Reward {
 		BlockHeight:     blockHeight,
 		TestCaseNames:   nil,
 		DataSourceNames: nil,
-		DataSourceFees:  nil,
-		TestCaseFees:    nil,
+		ListDSourceFees: []*DataSourceFees{},
+		ListTCaseFees:   []*TestCaseFees{},
 	}
 }
 
