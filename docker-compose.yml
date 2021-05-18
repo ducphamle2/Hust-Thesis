@@ -9,7 +9,7 @@ services:
       - 26666:26656
       - 26667:26657
     env_file:
-      - orai.dev.env
+      - orai.env
     volumes:
       - ./:/workspace
       - ./smart-contracts:/workspace/oraiwasm
