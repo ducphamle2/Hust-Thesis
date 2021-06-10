@@ -17,8 +17,8 @@ func DefaultGenesisState() *GenesisState {
 // Validate validates the provider genesis parameters
 func (gs *GenesisState) Validate() error {
 	for _, record := range gs.Reports {
-		if record.RequestID == "" {
-			return fmt.Errorf("invalid Report: Value: %s. Error: Missing RequestID", record.RequestID)
+		if record.RequestId == "" {
+			return fmt.Errorf("invalid Report: Value: %s. Error: Missing RequestID", record.RequestId)
 		}
 		if record.BlockHeight <= int64(0) {
 			return fmt.Errorf("invalid Report: BlockHeight: %d. Error: Invalid block height", record.BlockHeight)

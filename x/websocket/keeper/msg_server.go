@@ -26,11 +26,11 @@ func (m msgServer) AddReport(goCtx context.Context, msg *types.MsgCreateReport) 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// basic validation before adding the report
-	if m.keeper.HasReport(ctx, msg.RequestID, msg.Reporter.Validator) {
+	if m.keeper.HasReport(ctx, msg.RequestId, msg.Reporter.Validator) {
 		return nil, fmt.Errorf("Error: Validator already reported")
 	}
 
-	request, err := m.keeper.aiRequestKeeper.GetAIRequest(ctx, msg.RequestID)
+	request, err := m.keeper.aiRequestKeeper.GetAIRequest(ctx, msg.RequestId)
 	if err != nil {
 		return nil, fmt.Errorf("Error: Cannot find AI request")
 	}
@@ -39,10 +39,10 @@ func (m msgServer) AddReport(goCtx context.Context, msg *types.MsgCreateReport) 
 		return nil, fmt.Errorf("Error: cannot find reporter in the AI request")
 	}
 
-	report := types.NewReport(msg.RequestID, msg.DataSourceResults, msg.TestCaseResults, ctx.BlockHeight(), msg.Fees, msg.AggregatedResult, msg.Reporter, msg.ResultStatus)
+	report := types.NewReport(msg.RequestId, msg.DataSourceResults, msg.TestCaseResults, ctx.BlockHeight(), msg.Fees, msg.AggregatedResult, msg.Reporter, msg.ResultStatus)
 
 	// call keeper
-	err = m.keeper.SetReport(ctx, msg.RequestID, report)
+	err = m.keeper.SetReport(ctx, msg.RequestId, report)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +55,7 @@ func (m msgServer) AddReport(goCtx context.Context, msg *types.MsgCreateReport) 
 	)
 
 	return &types.MsgCreateReportRes{
-		RequestID:         msg.GetRequestID(),
+		RequestId:         msg.GetRequestId(),
 		DataSourceResults: msg.GetDataSourceResults(),
 		TestCaseResults:   msg.GetTestCaseResults(),
 		Reporter:          msg.GetReporter(),

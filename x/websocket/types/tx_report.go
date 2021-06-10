@@ -17,7 +17,7 @@ func (msg *MsgCreateReport) ValidateBasic() error {
 	reporter := msg.GetReporter()
 	if len(reporter.GetName()) == 0 || !provider.IsStringAlphabetic(reporter.GetName()) || len(reporter.GetName()) >= ReporterNameLen {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, reporter.String())
-	} else if len(msg.GetRequestID()) == 0 || reporter.Validator.Empty() {
+	} else if len(msg.GetRequestId()) == 0 || reporter.Validator.Empty() {
 		return sdkerrors.Wrap(ErrMsgReportInvalid, "Request ID / validator address cannot be empty")
 	} else if len(msg.GetDataSourceResults()) == 0 || len(msg.GetTestCaseResults()) == 0 || len(msg.GetAggregatedResult()) == 0 {
 		return sdkerrors.Wrap(ErrMsgReportInvalid, "lengths of the data source and test case must be greater than zero, and there must be an aggregated result")
@@ -35,7 +35,7 @@ func (msg *MsgCreateReport) ValidateBasic() error {
 			}
 		}
 		aggregatedResultSize := len(msg.AggregatedResult)
-		requestIdSize := len(msg.RequestID)
+		requestIdSize := len(msg.RequestId)
 		finalLen := dsResultSize + tcResultSize + aggregatedResultSize + requestIdSize
 		if finalLen >= MsgLen {
 			return sdkerrors.Wrap(ErrMsgReportInvalid, "Size of the report should not be larger than 200KB")

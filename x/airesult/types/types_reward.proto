@@ -14,8 +14,8 @@ message Reward {
   repeated cosmos.base.v1beta1.Coin validator_fees = 3 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins", (gogoproto.moretags) = "json:\"validator_fees\""];
   repeated DataSourceFees list_d_source_fees = 4;
   repeated TestCaseFees list_t_case_fees = 5;
-  repeated string DataSourceNames = 6;
-  repeated string TestCaseNames = 7;
+  repeated string data_source_names = 6;
+  repeated string test_case_names = 7;
 }
 
 message DataSourceFees {

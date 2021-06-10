@@ -9,16 +9,16 @@ import (
 // ResolveResult aggregates the results from the reports before storing it into the blockchain
 func (k Keeper) ResolveResult(ctx sdk.Context, rep *websocket.Report, valCount int, totalReportPercentage int64) {
 
-	id := rep.GetRequestID()
+	id := rep.GetRequestId()
 	if valCount == 1 {
 		k.SetResult(ctx, id, types.NewAIRequestResult(id, types.RequestStatusFinished, 1))
 		return
 	}
 	var result *types.AIRequestResult
 	if !k.HasResult(ctx, id) {
-		result = types.NewAIRequestResult(rep.GetRequestID(), types.RequestStatusPending, 0)
+		result = types.NewAIRequestResult(rep.GetRequestId(), types.RequestStatusPending, 0)
 	} else {
-		result, _ = k.GetResult(ctx, rep.GetRequestID())
+		result, _ = k.GetResult(ctx, rep.GetRequestId())
 	}
 	result.ResultLength += 1
 

@@ -16,7 +16,7 @@ func NewReport(
 	status string,
 ) *Report {
 	return &Report{
-		RequestID:         requestID,
+		RequestId:         requestID,
 		Reporter:          reporter,
 		DataSourceResults: dataSourceResults,
 		TestCaseResults:   testCaseResults,
@@ -72,7 +72,7 @@ func NewMsgCreateReport(
 	status string,
 ) *MsgCreateReport {
 	return &MsgCreateReport{
-		RequestID:         requestID,
+		RequestId:         requestID,
 		DataSourceResults: dataSourceResults,
 		TestCaseResults:   testCaseResults,
 		Reporter:          reporter,

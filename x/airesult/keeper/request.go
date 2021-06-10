@@ -12,7 +12,7 @@ import (
 // ResolveRequestsFromReports handles the reports received in a block to group all the validators, data source owners and test case owners
 func (k Keeper) ResolveRequestsFromReports(ctx sdk.Context, rep *websocket.Report, reward *types.Reward, blockHeight int64, rewardPercentage int64) (bool, int) {
 
-	req, _ := k.aiRequestKeeper.GetAIRequest(ctx, rep.GetRequestID())
+	req, _ := k.aiRequestKeeper.GetAIRequest(ctx, rep.GetRequestId())
 	validation := k.validateBasic(ctx, req, rep, blockHeight)
 	// if the report cannot pass the validation basic then we skip the rest
 	if !validation {
