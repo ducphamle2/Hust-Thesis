@@ -15,8 +15,5 @@ func checkFees(fees string) error {
 	if err != nil {
 		return sdkerrors.Wrap(ErrInvalidFeeType, err.Error())
 	}
-	if len(fees) == 0 {
-		return sdkerrors.Wrap(ErrInvalidFeeType, "The fee format is not correct")
-	}
 	return nil
 }

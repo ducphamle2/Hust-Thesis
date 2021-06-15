@@ -60,7 +60,7 @@ func (k msgServer) CreateAIRequest(goCtx context.Context, msg *types.MsgSetAIReq
 	spendableCoins := k.keeper.bankKeeper.SpendableCoins(ctx, msg.Creator)
 
 	// If the total fee is larger than the fee provided by the user then we return error
-	if requiredFees.IsAnyGT(providedFees) {
+	if providedFees.IsAllLT(requiredFees) {
 		k.keeper.Logger(ctx).Error(fmt.Sprintf("Your payment fees is less than required\n"))
 		return nil, sdkerrors.Wrap(types.ErrNeedMoreFees, fmt.Sprintf("Fees given: %v, where fees required is: %v", providedFees, requiredFees))
 	}

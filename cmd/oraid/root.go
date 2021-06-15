@@ -312,7 +312,7 @@ func initCmd(mbm module.BasicManager, customAppState app.GenesisState, defaultNo
 			config.Moniker = args[0]
 			config.P2P.MaxNumInboundPeers = 100
 			config.P2P.MaxNumOutboundPeers = 100
-			config.Consensus.TimeoutCommit = time.Second * 1
+			config.Consensus.TimeoutCommit = time.Second * 5
 
 			genFile := config.GenesisFile()
 			overwrite, _ := cmd.Flags().GetBool(FlagOverwrite)
