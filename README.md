@@ -1,6 +1,7 @@
 ## Prerequisites
 
 Docker and docker-compose
+
 ## Installation
 
 ```bash
@@ -24,14 +25,14 @@ make build GOMOD_FLAGS=
 ln -s $PWD/build/oraid /usr/bin/oraid
 
 # setup blockchain and run
-./scripts/setup_genesis.sh <pass-phrase>
+./scripts/setup_genesis.sh
 ```
 
 ## Run
 
 ```bash
 # start node
-oraid start --rpc.laddr tcp://0.0.0.0:26657 --log_level error
+oraid start --rpc.laddr tcp://0.0.0.0:26657
 
 # start websocket subscribe for processing event log in another terminal
 oraid tx websocket subscribe --max-try 10 --from $USER --gas="auto" --gas-adjustment="1.5" --chain-id=$CHAIN_ID -y
