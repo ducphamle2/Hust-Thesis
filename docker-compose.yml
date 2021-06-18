@@ -1,7 +1,7 @@
 version: '3.3'
 services:
   orai:
-    image: orai/orai:alpine-wasm
+    image: orai/orai:alpine-thesis
     working_dir: /workspace
     tty: true    
     ports:
@@ -12,4 +12,3 @@ services:
       - orai.env
     volumes:
       - ./:/workspace
-      - ./smart-contracts:/workspace/oraiwasm
