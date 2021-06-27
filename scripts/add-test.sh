@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pass=${PASS:='````````'}
+pass=${1:='````````'}
 
 echo $pass | sh ./scripts/setup_genesis.sh
 
@@ -12,5 +12,5 @@ done
 bash ./scripts/query-addrs.sh > addrs.txt && chmod -R 777 addrs.txt
 bash ./scripts/addrs-length.sh > addr-length.txt && chmod -R 777 addr-length.txt
 #mnemonic=winner label sure opinion leader siren tape wheel sense garage news trend penalty defy shell alpha able predict duck cute draw faith room mercy
-addr=orai1m6mn6pd86dvsrgx2nxfj56rpjf5vyczz7sreqf
-oraid start & (sleep 3 && echo $pass | oraid tx send $USER $addr 90000000000orai --from $USER --chain-id $CHAIN_ID -y)
+addr=orai1qar957ppskpxyr7hasqr9zhgw4x0n2fsq6r32t
+oraid start & (sleep 5 && echo $pass | oraid tx send $USER $addr 90000000000orai --from $USER --chain-id $CHAIN_ID -y)

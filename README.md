@@ -40,3 +40,51 @@ oraid tx websocket subscribe --max-try 10 --from $USER --gas="auto" --gas-adjust
 # run as a background process
 docker-compose exec -d orai bash -c "echo $KEYRING_PASS | oraid tx websocket subscribe --max-try 10 --from $USER --gas="auto" --gas-adjustment="1.5" --chain-id=$CHAIN_ID -y"
 ```
+
+## Benchmarking
+
+1. Start the node with test accounts
+
+```bash
+./scripts/add-test.sh 12345678
+```
+
+2. Send test accounts ORAI & generate provider scripts
+
+This command must be used in the oraicli project instead of direct call for simplification
+
+```bash
+NODE_ENV=thesis ./send-deploy.sh
+```
+
+2. Generate AI requests (>= 1500)
+
+```
+./scripts/test-request.sh 12345678
+```
+
+3. Run Jmeter test using CLI:
+
+Query a list of 1500 AI requests
+
+```bash
+$HOME/apache-jmeter-5.3/bin/jmeter -n -t query\ test.jmx -l aireq-pagination.jtl -o aireq-pagination/
+```
+
+Query a single request
+
+```bash
+$HOME/apache-jmeter-5.3/bin/jmeter -n -t single-airequest.jmx -l aireq-single.jtl -e -o ./aireq-single/
+```
+
+Query a transaction using lcd
+
+```bash
+$HOME/apache-jmeter-5.3/bin/jmeter -n -t lcd-tx.jmx -l lcd-tx.jtl -e -o ./lcd-tx/
+```
+
+Query a transaction using rpc
+
+```bash
+$HOME/apache-jmeter-5.3/bin/jmeter -n -t rpc-tx.jmx -l rpc-tx.jtl -e -o ./rpc-tx/
+```

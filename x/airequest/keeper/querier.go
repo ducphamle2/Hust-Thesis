@@ -41,15 +41,18 @@ func (k *Querier) QueryAIRequest(goCtx context.Context, req *types.QueryAIReques
 func (k *Querier) QueryAIRequestIDs(goCtx context.Context, req *types.QueryAIRequestIDsReq) (*types.QueryAIRequestIDsRes, error) {
 
 	var requestIDs []string
+	var count int64
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	iterator := k.keeper.GetPaginatedAIRequests(ctx, uint(req.Page), uint(req.Limit))
 
 	for ; iterator.Valid(); iterator.Next() {
+		count += 1
 		requestIDs = append(requestIDs, string(iterator.Key()))
 	}
 
 	return &types.QueryAIRequestIDsRes{
 		RequestIds: requestIDs,
+		Total:      count,
 	}, nil
 }
