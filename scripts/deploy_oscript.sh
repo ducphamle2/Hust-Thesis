@@ -13,6 +13,7 @@ OS_TC=''
 NONCE=${5:-1}
 DIR_PATH=${6:-$PWD}
 PASS=${7:-123456789}
+FEES=${8:-0orai}
 
 # add double quotes in the list of data sources
 for ((i=0; i<${#DS[@]}; i++));
@@ -32,7 +33,7 @@ OS_TC=${OS_TC::-1}
 
 OS_INPUT=${4:-'{"ai_data_source":['$OS_DS'],"testcase":['$OS_TC']}'}
 
-sh $PWD/scripts/deploy-contract-store-addr.sh $DIR_PATH/smart-contracts/$OS/artifacts/$OS.wasm "$OS $NONCE" "$OS_INPUT" $PASS
+sh $PWD/scripts/deploy-contract-store-addr.sh $DIR_PATH/$OS/artifacts/$OS.wasm "$OS $NONCE" "$OS_INPUT" $PASS
 
 # check if the oracle script exists or not
 oraid query provider oscript $OS 2> is_exist.txt
@@ -47,5 +48,9 @@ if [ -s is_exist.txt ]
 then
     echo $PASS | oraid tx provider set-oscript $OS $address "$description" --ds ${DS:-classification} --tc ${TC:-classification_testcase} --from $USER --chain-id $CHAIN_ID -y
 else
-    echo $PASS | oraid tx provider edit-oscript $OS $OS $address "$description" --ds $DS_RAW --tc $TC_RAW --from $USER --chain-id $CHAIN_ID -y
+    echo $PASS | oraid tx provider edit-oscript $OS $OS $address "$description" $FEES --ds $DS_RAW --tc $TC_RAW --from $USER --chain-id $CHAIN_ID -y
 fi
+
+# example
+
+# ./scripts/deploy_oscript.sh cv023 cv023_tc cv023_os '' 1 ./smart-contracts/cv 12345678 0orai

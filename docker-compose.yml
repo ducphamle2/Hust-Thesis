@@ -12,3 +12,4 @@ services:
       - orai.env
     volumes:
       - ./:/workspace
+      - $HOME/bkc_research/cosmos/oraiwasm/package:/workspace/smart-contracts
